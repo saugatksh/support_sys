@@ -1,0 +1,218 @@
+<odoo>
+    <data>
+        <template id="homepage" name="homepage">
+            <t t-call="website.layout">
+                <t t-set="sidebar" t-value="1"/>
+                <t t-set="title">Support_Sys</t>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+                <!-- Sidebar Styles -->
+                <style>
+                    /* Common Styles for Sidebar */
+                    .client-sidebar {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 200px;
+                    background-color: #f1f1f1; /* Updated background color */
+                    color: white;
+                    padding-top: 20px;
+                    margin-top: 38px;
+                    transition: all 0.3s;
+                    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2); /* Increased box shadow */
+                    }
+
+                    .client-sidebar ul {
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0;
+                    }
+
+                    .client-sidebar a {
+                    text-decoration: none;
+                    color: black;
+                    display: block;
+                    padding: 15px;
+                    font-size: 16px;
+                    border-bottom: 1px solid #276e72;
+                    transition: background 0.3s;
+                    position: relative;
+                    }
+
+                    .client-sidebar a:hover {
+                    background-color: white; /* Darkened background color on hover */
+                    }
+
+                    .client-sidebar a.active {
+                    background-color: #27ae60;
+                    color: white;
+                    }
+
+                    .client-sidebar .has-submenu {
+                    position: relative;
+                    }
+
+                    .client-sidebar .sub-menu {
+                    padding-left: 20px;
+                    display: none;
+                    animation: fadeIn 0.3s ease-in-out;
+                    }
+
+                    .client-sidebar .menu-open .sub-menu {
+                    display: block;
+                    }
+
+                    .client-sidebar a .dropdown-icon {
+                    position: absolute;
+                    right: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    }
+
+                    .client-sidebar .sub-menu a {
+                    padding: 10px;
+                    font-size: 14px;
+                    color: black;
+                    transition: background 0.3s;
+                    }
+
+                    .client-sidebar .sub-menu a:hover {
+                    background-color: white; /* Darkened background color on hover */
+                    }
+
+                    /* Logo Styles */
+                    .support-logo {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    padding: 10px;
+                    background-color: #222; /* Darkened background color */
+                    text-align: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 20px;
+                    }
+
+                    /* Toggle Button Styles */
+                    .toggle-btn {
+                    display: none;
+                    cursor: pointer;
+                    position: fixed;
+                    top: 10px;
+                    left: 10px;
+                    font-size: 20px;
+                    color: white;
+                    }
+
+                    /* Media Query for Responsive Design */
+                    @media only screen and (max-width: 768px) {
+                    .client-sidebar {
+                    width: 100%;
+                    }
+
+                    .client-sidebar ul {
+                    padding-top: 20px;
+                    }
+
+                    .client-sidebar .support-logo {
+                    display: none;
+                    }
+                    }
+
+                    @keyframes fadeIn {
+                    from {
+                    opacity: 0;
+                    }
+
+                    to {
+                    opacity: 1;
+                    }
+                    }
+                </style>
+
+                <!-- Sidebar Content -->
+                <div class="client-sidebar">
+                    <div class="toggle-btn">&#9776;</div>
+                    <ul>
+                        <li>
+                            <a href="/" class="active">
+                                <i class="fa fa-dashboard"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="menu-toggle">
+                                <i class="fa fa-users"></i>
+                                Client
+                                <span class="dropdown-icon">&#9662;</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="ticket_history">Ticket History</a>
+                                </li>
+                                <li>
+                                    <a href="new_ticket">New Ticket</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="menu-toggle">
+                                <i class="fa fa-user"></i>
+                                Employee
+                                <span class="dropdown-icon">&#9662;</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="employee_history">Employee History</a>
+                                </li>
+                                <li>
+                                    <a href="employee_expense">Expense Request</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-user-circle"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Your main content goes here -->
+                <div class="content">
+                    <!-- Your client dashboard content -->
+                </div>
+
+                <!-- Sidebar JavaScript -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                    var menuToggle = document.querySelectorAll('.menu-toggle');
+                    var sidebar = document.querySelector('.client-sidebar');
+                    var toggleBtn = document.querySelector('.toggle-btn');
+
+                    // Toggle Sidebar Visibility
+                    toggleBtn.addEventListener('click', function () {
+                    sidebar.classList.toggle('sidebar-open');
+                    });
+
+                    menuToggle.forEach(function (toggle) {
+                    toggle.addEventListener('click', function () {
+                    var parent = this.closest('.has-submenu');
+                    parent.classList.toggle('menu-open');
+                    });
+                    });
+                    });
+                </script>
+            </t>
+        </template>
+    </data>
+</odoo>

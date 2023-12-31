@@ -1,0 +1,295 @@
+<odoo>
+    <data>
+        <template id="new_ticket" name="New Ticket">
+            <t t-call="website.layout">
+                <t t-set="sidebar" t-value="1"/>
+                <style>
+                    /* Common Styles for Sidebar */
+                    .client-sidebar {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 200px;
+                    background-color: #f1f1f1; /* Updated background color */
+                    color: white;
+                    padding-top: 20px;
+                    margin-top: 38px;
+                    transition: all 0.3s;
+                    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2); /* Increased box shadow */
+                    }
+
+                    .client-sidebar ul {
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0;
+                    }
+
+                    .client-sidebar a {
+                    text-decoration: none;
+                    color: black;
+                    display: block;
+                    padding: 15px;
+                    font-size: 16px;
+                    border-bottom: 1px solid #276e72;
+                    transition: background 0.3s;
+                    position: relative;
+                    }
+
+                    .client-sidebar a:hover {
+                    background-color: white; /* Darkened background color on hover */
+                    }
+
+                    #active {
+                    background-color: #27ae60;
+                    color: white;
+                    }
+
+                    .client-sidebar .has-submenu {
+                    position: relative;
+                    }
+
+                    .client-sidebar .sub-menu {
+                    padding-left: 20px;
+                    display: none;
+                    animation: fadeIn 0.3s ease-in-out;
+                    }
+
+                    .client-sidebar .menu-open .sub-menu {
+                    display: block;
+                    }
+
+                    .client-sidebar a .dropdown-icon {
+                    position: absolute;
+                    right: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    }
+
+                    .client-sidebar .sub-menu a {
+                    padding: 10px;
+                    font-size: 14px;
+                    color: black;
+                    transition: background 0.3s;
+                    }
+
+                    .client-sidebar .sub-menu a:hover {
+                    background-color: white; /* Darkened background color on hover */
+                    }
+
+                    /* Logo Styles */
+                    .support-logo {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    padding: 10px;
+                    background-color: #222; /* Darkened background color */
+                    text-align: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 20px;
+                    }
+
+                    /* Toggle Button Styles */
+                    .toggle-btn {
+                    display: none;
+                    cursor: pointer;
+                    position: fixed;
+                    top: 10px;
+                    left: 10px;
+                    font-size: 20px;
+                    color: white;
+                    }
+
+                    /* Media Query for Responsive Design */
+                    @media only screen and (max-width: 768px) {
+                    .client-sidebar {
+                    width: 100%;
+                    }
+
+                    .client-sidebar ul {
+                    padding-top: 20px;
+                    }
+
+                    .client-sidebar .support-logo {
+                    display: none;
+                    }
+                    }
+
+                    @keyframes fadeIn {
+                    from {
+                    opacity: 0;
+                    }
+
+                    to {
+                    opacity: 1;
+                    }
+                    }
+                </style>
+
+
+                <div class="client-sidebar">
+                    <div class="toggle-btn">&#9776;</div>
+                    <ul>
+                        <li>
+                            <a href="/">
+                                <i class="fa fa-dashboard"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="menu-toggle" id="active">
+                                <i class="fa fa-users"></i>
+                                Client
+                                <span class="dropdown-icon">&#9662;</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a  class="active" href="ticket_history">Ticket History</a>
+                                </li>
+                                <li>
+                                    <a href="new_ticket">New Ticket</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="menu-toggle">
+                                <i class="fa fa-user"></i>
+                                Employee
+                                <span class="dropdown-icon">&#9662;</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="employee_history">Employee History</a>
+                                </li>
+                                <li>
+                                    <a href="employee_expense">Expense Request</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-user-circle"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="content">
+
+                    <script src="https://nepalidatepicker.sajanmaharjan.com.np/nepali.datepicker/js/nepali.datepicker.v4.0.1.min.js"
+                            type="text/javascript"></script>
+
+                    <div class="container" >
+                        <script>
+                            function myFunction() {
+                            alert("Your ticket has been submitted");
+                            }
+                        </script>
+                        <form action="/ticket_raise" method="post" onsubmit="myFunction()" enctype="multipart/form-data"
+                              style="max-width: 600px; margin: auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                            <h3>Raise a Ticket</h3>
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                            <!-- Input fields for ticket raise form -->
+                            <label for="ticket_type" style="font-size: 14px; margin-bottom: 8px;">Ticket Type:</label>
+                            <select name="ticket_type" required="true"
+                                    style="width: 100%; padding: 10px; margin-bottom: 16px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                                <option value="">--Select a category--</option>
+                                <option value="complain">Complain</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="query">Query</option>
+                                <option value="request">Request</option>
+                            </select>
+
+                            <label for="employee" style="font-size: 14px; margin-bottom: 8px;">Choose a Product:
+                            </label>
+                            <select name="product" required="true"
+                                    style="width: 100%; padding: 10px; margin-bottom: 16px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                                <option value="">--Select Product--</option>
+                                <option value="Internet">Internet</option>
+                                <option value="Software">Software</option>
+                                <option value="Website">Website</option>
+
+                            </select>
+
+                            <label for="priority" style="font-size: 14px; margin-bottom: 8px;">Priority:</label>
+                            <select name="priority" required="true"
+                                    style="width: 100%; padding: 10px; margin-bottom: 16px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                                <option value="">--Select Priority--</option>
+                                <option value="urgent">Urgent</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+
+                            <label for="message" style="font-size: 14px; margin-bottom: 8px;">Message:</label>
+                            <textarea name="message" rows="4"
+                                      style="width: 100%; padding: 10px; margin-bottom: 16px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;"
+                                      required="True"></textarea>
+                            <label for="client_email" style="font-size: 14px; margin-bottom: 8px;">Your Email:</label>
+                            <input type="email" name="client_email" required="true"
+                                   style="width: 100%; padding: 10px; margin-bottom: 16px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;"/>
+
+                            <!-- Photo Upload Section -->
+                            <label for="photo" style="font-size: 14px; margin-bottom: 8px;">Upload Photo:</label>
+                            <input type="file" name="photo" accept=".jpg, .jpeg, .png" style="margin-bottom: 16px;"/>
+                            <img id="image-preview" src="#" alt="Image Preview"
+                                 style="max-width: 100%; max-height: 150px; margin-bottom: 16px; display: none;"/>
+                            <br></br>
+                            <label for="employee" style="font-size: 14px; margin-bottom: 8px;">Ticket Issued Date:
+                            </label>
+                            <input type="text" id="nepalidatepicker" name="nepalidatepicker" reaonly="True"
+                                   required="True" style="border-style:;"/>
+                            <!--                                                <script>-->
+                            <!--                            document.addEventListener('DOMContentLoaded', function() {-->
+                            <!--                                var today = new Date().toISOString().slice(0, 10);-->
+                            <!--                                document.getElementById('nepalidatepicker').value = today;-->
+                            <!--                            });-->
+                            <!--                        </script>-->
+
+
+                            <br></br>
+
+                            <button type="submit"
+                                    style="background-color: #4caf50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
+                                Submit Ticket
+                            </button>
+                            <button style="background-color: #4caf50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;"
+                                    onclick="location.href='/ticket_history'">Back
+                            </button>
+                        </form>
+                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                        var menuToggle = document.querySelectorAll('.menu-toggle');
+
+                        menuToggle.forEach(function (toggle) {
+                        toggle.addEventListener('click', function () {
+                        var parent = this.closest('.has-submenu');
+                        parent.classList.toggle('menu-open');
+                        });
+                        });
+                        });
+                    </script>
+                    <script type="text/javascript">
+                        window.onload = function () {
+                        var mainInput = document.getElementById("nepalidatepicker");
+                        mainInput.nepaliDatePicker();
+                        };
+                    </script>
+
+                </div>
+
+            </t>
+        </template>
+    </data>
+</odoo>

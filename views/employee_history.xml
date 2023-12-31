@@ -1,0 +1,278 @@
+<odoo>
+    <data>
+        <template id="employee_history" name="employee_history">
+            <t t-call="website.layout">
+                <style>
+                    /* Common Styles for Sidebar */
+                    .client-sidebar {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 200px;
+                    background-color: #f1f1f1; /* Updated background color */
+                    color: white;
+                    padding-top: 20px;
+                    margin-top: 38px;
+                    transition: all 0.3s;
+                    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2); /* Increased box shadow */
+                    }
+
+                    .client-sidebar ul {
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0;
+                    }
+
+                    .client-sidebar a {
+                    text-decoration: none;
+                    color: black;
+                    display: block;
+                    padding: 15px;
+                    font-size: 16px;
+                    border-bottom: 1px solid #276e72;
+                    transition: background 0.3s;
+                    position: relative;
+                    }
+
+                    .client-sidebar a:hover {
+                    background-color: white; /* Darkened background color on hover */
+                    }
+
+                    #active {
+                    background-color: #27ae60;
+                    color: white;
+                    }
+
+                    .client-sidebar .has-submenu {
+                    position: relative;
+                    }
+
+                    .client-sidebar .sub-menu {
+                    padding-left: 20px;
+                    display: none;
+                    animation: fadeIn 0.3s ease-in-out;
+                    }
+
+                    .client-sidebar .menu-open .sub-menu {
+                    display: block;
+                    }
+
+                    .client-sidebar a .dropdown-icon {
+                    position: absolute;
+                    right: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    }
+
+                    .client-sidebar .sub-menu a {
+                    padding: 10px;
+                    font-size: 14px;
+                    color: black;
+                    transition: background 0.3s;
+                    }
+
+                    .client-sidebar .sub-menu a:hover {
+                    background-color: white; /* Darkened background color on hover */
+                    }
+
+                    /* Logo Styles */
+                    .support-logo {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    padding: 10px;
+                    background-color: #222; /* Darkened background color */
+                    text-align: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 20px;
+                    }
+
+                    /* Toggle Button Styles */
+                    .toggle-btn {
+                    display: none;
+                    cursor: pointer;
+                    position: fixed;
+                    top: 10px;
+                    left: 10px;
+                    font-size: 20px;
+                    color: white;
+                    }
+
+                    /* Media Query for Responsive Design */
+                    @media only screen and (max-width: 768px) {
+                    .client-sidebar {
+                    width: 100%;
+                    }
+
+                    .client-sidebar ul {
+                    padding-top: 20px;
+                    }
+
+                    .client-sidebar .support-logo {
+                    display: none;
+                    }
+                    }
+
+                    @keyframes fadeIn {
+                    from {
+                    opacity: 0;
+                    }
+
+                    to {
+                    opacity: 1;
+                    }
+                    }
+                </style>
+
+
+                <div class="client-sidebar">
+                    <div class="toggle-btn">&#9776;</div>
+                    <ul>
+                        <li>
+                            <a href="/" >
+                                <i class="fa fa-dashboard"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="menu-toggle">
+                                <i class="fa fa-users"></i>
+                                Client
+                                <span class="dropdown-icon">&#9662;</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="ticket_history">Ticket History</a>
+                                </li>
+                                <li>
+                                    <a href="new_ticket">New Ticket</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="menu-toggle" id="active">
+                                <i  class="fa fa-user"></i>
+                                Employee
+                                <span class="dropdown-icon">&#9662;</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="employee_history">Employee History</a>
+                                </li>
+                                <li>
+                                    <a href="employee_expense">Expense Request</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-user-circle"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!--                <button class="addnewdata"-->
+                <!--                        style="background-color: #581845; color: white; border: 2px; border-radius: 5px; margin-left:90%; margin-top:1%;"-->
+                <!--                        onclick="window.location.href = '/new_ticket'">New Request-->
+                <!--                </button>-->
+
+                <div class="container-fluid" style="width:85%; margin-left:15%; margin-top:1%;">
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Employee History</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr class="active">
+                                            <!--                                            <th>Employee ID</th>-->
+
+                                            <th>Expense Date</th>
+                                            <th>Starting Location</th>
+                                            <th>Ending location</th>
+                                             <th>Category</th>
+                                            <th>Amount</th>
+                                            <th>Bill Image</th>
+                                            <th>Description </th>
+                                            <th>Hotel Name</th>
+                                            <th>Hotel Address</th>
+                                            <th>Hotel Phone</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="records" t-as="data">
+                                            <tr>
+                                                <td>
+                                                    <t t-out="data['nepalidatepicker']"/>
+                                                </td>
+                                                <td>
+                                                    <t t-out="data['starting_location']"/>
+                                                </td>
+                                                <td>
+                                                    <t t-out="data['ending_location']"/>
+                                                </td>
+                                                <td>
+                                                    <t t-out="data['expense_category']"/>
+                                                </td>
+                                                <td>
+                                                    <t t-out="data['amount']"/>
+                                                </td>
+                                                <td>
+                                                    <img t-if="data['photo']"
+                                                         t-att-src="'data:image/png;base64,'+data['photo']"
+                                                         style="max-width: 50px; max-height: 50px;"/>
+                                                </td>
+                                                <td>
+                                                    <t t-out="data['description']"/>
+                                                </td>
+                                                <td>
+                                                    <t t-out="data['hotel_name']"/>
+                                                </td>
+                                                <td>
+                                                    <t t-out="data['hotel_address']"/>
+                                                </td>
+                                                <td>
+                                                    <t t-out="data['hotel_phone']"/>
+                                                </td>
+
+
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                            var menuToggle = document.querySelectorAll('.menu-toggle');
+
+                            menuToggle.forEach(function (toggle) {
+                            toggle.addEventListener('click', function () {
+                            var parent = this.closest('.has-submenu');
+                            parent.classList.toggle('menu-open');
+                            });
+                            });
+                            });
+                        </script>
+                    </div>
+
+                </div>
+
+            </t>
+        </template>
+    </data>
+</odoo>

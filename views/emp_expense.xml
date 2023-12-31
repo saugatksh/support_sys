@@ -1,0 +1,404 @@
+<odoo>
+    <data>
+        <template id="employee_expense" name="employee_expense">
+            <t t-call="website.layout">
+                <style>
+                    /* Common Styles for Sidebar */
+                    .client-sidebar {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 200px;
+                    background-color: #f1f1f1; /* Dark background color */
+                    color: white;
+                    padding-top: 20px;
+                    margin-top: 38px;
+                    transition: all 0.3s;
+                    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.2);
+                    }
+
+                    .client-sidebar ul {
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0;
+                    }
+
+                    .client-sidebar a {
+                    text-decoration: none;
+                    color: black;
+                    display: block;
+                    padding: 15px;
+                    font-size: 16px;
+                    border-bottom: 1px solid #34495e; /* Border color */
+                    transition: background 0.3s;
+                    position: relative;
+                    }
+
+                    .client-sidebar a:hover {
+                    background-color: white; /* Darkened background color on hover */
+                    }
+
+                    #active {
+                    background-color: #27ae60; /* Active item color */
+                    color: white;
+                    }
+
+                    .client-sidebar .has-submenu {
+                    position: relative;
+                    }
+
+                    .client-sidebar .sub-menu {
+                    padding-left: 20px;
+                    display: none;
+                    animation: fadeIn 0.3s ease-in-out;
+                    }
+
+                    .client-sidebar .menu-open .sub-menu {
+                    display: block;
+                    }
+
+                    .client-sidebar a .dropdown-icon {
+                    position: absolute;
+                    right: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    }
+
+                    .client-sidebar .sub-menu a {
+                    padding: 10px;
+                    font-size: 14px;
+                    color: black;
+                    transition: background 0.3s;
+                    }
+
+                    .client-sidebar .sub-menu a:hover {
+                    background-color: white; /* Darkened background color on hover */
+                    }
+
+                    /* Logo Styles */
+                    .support-logo {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    padding: 10px;
+                    background-color: #f1f1f1; /* Dark background color */
+                    text-align: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 20px;
+                    }
+
+                    /* Toggle Button Styles */
+                    .toggle-btn {
+                    display: none;
+                    cursor: pointer;
+                    position: fixed;
+                    top: 10px;
+                    left: 10px;
+                    font-size: 20px;
+                    color: white;
+                    }
+
+                    /* Media Query for Responsive Design */
+                    @media only screen and (max-width: 768px) {
+                    .client-sidebar {
+                    width: 100%;
+                    }
+
+                    .client-sidebar ul {
+                    padding-top: 20px;
+                    }
+
+                    .client-sidebar .support-logo {
+                    display: none;
+                    }
+                    }
+
+                    @keyframes fadeIn {
+                    from {
+                    opacity: 0;
+                    }
+
+                    to {
+                    opacity: 1;
+                    }
+                    }
+
+                    /* Content Styles */
+                    .content {
+                    padding: 20px;
+                    margin-left: 200px; /* Adjusted margin for the sidebar */
+                    }
+
+                    .container {
+                    max-width: 800px;
+                    margin: 0 auto;
+                    }
+
+                    h3 {
+                    color: #27ae60; /* Heading color */
+                    text-align: center;
+                    }
+
+                    .form-group {
+                    margin-bottom: 20px;
+                    }
+
+                    label {
+                    font-size: 16px;
+                    margin-bottom: 8px;
+                    display: block;
+                    color: #34495e; /* Label color */
+                    }
+
+                    input,
+                    select,
+                    textarea {
+                    width: 100%;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    font-size: 16px;
+                    }
+
+                    input[type="file"] {
+                    margin-top: 8px;
+                    }
+
+                    .btnRegister {
+                    background-color: #27ae60; /* Button background color */
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    }
+
+                    .btnRegister:hover {
+                    background-color: white; /* Darkened button background color on hover */
+                    }
+
+                    #image-preview {
+                    max-width: 100%;
+                    max-height: 150px;
+                    margin-bottom: 16px;
+                    display: none;
+                    }
+
+                </style>
+
+                <div class="client-sidebar">
+                    <div class="toggle-btn">&#9776;</div>
+                    <ul>
+                        <li>
+                            <a href="/">
+                                <i class="fa fa-dashboard"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#" class="menu-toggle">
+                                <i class="fa fa-users"></i>
+                                Client
+                                <span class="dropdown-icon">&#9662;</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="ticket_history">Ticket History</a>
+                                </li>
+                                <li>
+                                    <a href="new_ticket">New Ticket</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu">
+                            <a id="active" href="#" class="menu-toggle">
+                                <i class="fa fa-user"></i>
+                                Employee
+                                <span class="dropdown-icon">&#9662;</span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="employee_history">Employee History</a>
+                                </li>
+                                <li>
+                                    <a href="employee_expense">Expense Request</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-user-circle"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="content">
+                    <script src="https://nepalidatepicker.sajanmaharjan.com.np/nepali.datepicker/js/nepali.datepicker.v4.0.1.min.js"
+                            type="text/javascript"></script>
+
+                    <div class="container">
+                        <div class="content" style="width:150%; margin-left: -25%; margin-top:1%;">
+
+                            <div class="container">
+                                <script>
+                                    function myFunction() {
+                                    alert("Your ticket has been submitted");
+                                    }
+                                </script>
+
+                                <form action="/expense_form" method="post" onsubmit="myFunction()"
+                                      enctype="multipart/form-data"
+                                      style="max-width: 600px; margin: auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                                    <h3>Expense Request</h3>
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="container register">
+
+                                        <div class="form-group">
+                                            <label for="detailsType">Select Details Type:</label>
+                                            <select id="detailsType" class="form-control"
+                                                    onchange="toggleDetailsSection()">
+                                                <option value="none">Select an option</option>
+                                                <option value="hotel">Hotel Details</option>
+                                                <option value="non-hotel">Non-Hotel Details</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Hotel details fields -->
+                                        <div class="hotel-details" style="display: none;">
+                                            <!-- Your existing hotel details fields go here -->
+                                            <div class="form-group">
+                                                <label for="hotel_d">Hotel Name</label>
+                                                <input type="text" class="form-control" name="hotel_name"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="hotel_c">Hotel Contact Number</label>
+                                                <input type="text" class="form-control" name="hotel_phone"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="hotel_a">Hotel Address</label>
+                                                <input type="text" class="form-control" name="hotel_address"/>
+                                            </div>
+                                        </div>
+
+                                        <!-- Non-hotel details fields -->
+                                        <div class="non-hotel-details" style="display: none;">
+                                            <!-- Your existing non-hotel details fields go here -->
+                                            <!-- Add your existing non-hotel details fields here -->
+                                            <div class="form-group">
+                                                <!-- Non-hotel details fields go here -->
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="emp_s">Starting Location</label>
+                                            <input type="text" id="loc1" class="form-control" name="starting_location"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="emp_e">Ending Location</label>
+                                            <input type="text" id="loc2" class="form-control" name="ending_location"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="nepalidatepicker">Expense Date</label>
+                                            <input type="text" class="form-control" name="nepalidatepicker"
+                                                   id="nepalidatepicker"/>
+                                        </div>
+
+
+                                        <!-- Your existing form fields go here -->
+
+                                        <!-- Updated JavaScript -->
+                                        <script>
+                                            function toggleDetailsSection() {
+                                            var detailsType = document.getElementById('detailsType').value;
+
+                                            // Hide both sections initially
+                                            document.querySelector('.hotel-details').style.display = 'none';
+                                            document.querySelector('.non-hotel-details').style.display = 'none';
+
+                                            // Show the selected section
+                                            if (detailsType === 'hotel') {
+                                            document.querySelector('.hotel-details').style.display = 'block';
+                                            } else if (detailsType === 'non-hotel') {
+                                            document.querySelector('.non-hotel-details').style.display = 'block';
+                                            }
+                                            }
+                                        </script>
+
+                                        <div class="form-group">
+                                            <label for="amount">Amount</label>
+                                            <input type="number" class="form-control" name="amount"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="expense_category">Expense Category</label>
+                                            <select name="expense_category" required="true" class="form-control">
+                                                <option value="meals">Meals</option>
+                                                <option value="travel">Travel</option>
+                                                <option value="accommodation">Accommodation</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="desc">Description</label>
+                                            <textarea id="desc" name="description" class="form-control"
+                                                      placeholder="Description..." rows="4"></textarea>
+                                        </div>
+
+                                        <label for="photo">Bill Image</label>
+                                        <input type="file" name="photo" accept=".jpg, .jpeg, .png"
+                                               class="form-control"/>
+                                        <img id="image-preview" src="#" alt="Image Preview"/>
+                                        <br></br>
+
+                                        <input type="submit" class="btn btnRegister" value="Submit"/>
+                                    </div>
+                                </form>
+                            </div>
+                            <script type="text/javascript">
+                                window.onload = function () {
+                                var mainInput = document.getElementById("nepalidatepicker");
+                                mainInput.nepaliDatePicker();
+                                };
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                    var menuToggle = document.querySelectorAll('.menu-toggle');
+                    var sidebar = document.querySelector('.client-sidebar');
+                    var toggleBtn = document.querySelector('.toggle-btn');
+
+                    // Toggle Sidebar Visibility
+                    toggleBtn.addEventListener('click', function () {
+                    sidebar.classList.toggle('sidebar-open');
+                    });
+
+                    menuToggle.forEach(function (toggle) {
+                    toggle.addEventListener('click', function () {
+                    var parent = this.closest('.has-submenu');
+                    parent.classList.toggle('menu-open');
+                    });
+                    });
+                    });
+                </script>
+            </t>
+        </template>
+    </data>
+</odoo>
